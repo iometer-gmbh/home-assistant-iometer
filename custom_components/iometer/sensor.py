@@ -41,19 +41,13 @@ SENSOR_TYPES: list[IOmeterEntityDescription] = [
         value_fn=lambda data: data.status.meter.number,
     ),
     IOmeterEntityDescription(
-        key="connection_status",
-        translation_key="connection_status",
-        device_class=SensorDeviceClass.ENUM,
-        options=["connected", "disconnected"],
-        value_fn=lambda data: data.status.device.core.connection_status,
-    ),
-    IOmeterEntityDescription(
         key="wifi_rssi",
         translation_key="wifi_rssi",
         native_unit_of_measurement=SIGNAL_STRENGTH_DECIBELS,
         device_class=SensorDeviceClass.SIGNAL_STRENGTH,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda data: data.status.device.bridge.rssi,
     ),
     IOmeterEntityDescription(
@@ -63,13 +57,14 @@ SENSOR_TYPES: list[IOmeterEntityDescription] = [
         device_class=SensorDeviceClass.SIGNAL_STRENGTH,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+        entity_registry_enabled_default=False,
         value_fn=lambda data: data.status.device.core.rssi,
     ),
     IOmeterEntityDescription(
         key="power_status",
         translation_key="power_status",
         device_class=SensorDeviceClass.ENUM,
-        options=["battery", "wired"],
+        options=["battery", "wired", "unknown"],
         value_fn=lambda data: data.status.device.core.power_status or STATE_UNKNOWN,
     ),
     IOmeterEntityDescription(
@@ -81,18 +76,10 @@ SENSOR_TYPES: list[IOmeterEntityDescription] = [
         value_fn=lambda data: data.status.device.core.battery_level,
     ),
     IOmeterEntityDescription(
-        key="attachment_status",
-        translation_key="attachment_status",
-        device_class=SensorDeviceClass.ENUM,
-        options=["attached", "detached"],
-        value_fn=lambda data: data.status.device.core.attachment_status
-        or STATE_UNKNOWN,
-    ),
-    IOmeterEntityDescription(
         key="pin_status",
         translation_key="pin_status",
         device_class=SensorDeviceClass.ENUM,
-        options=["entered", "pending", "missing"],
+        options=["entered", "pending", "missing", "unknown"],
         value_fn=lambda data: data.status.device.core.pin_status or STATE_UNKNOWN,
     ),
     IOmeterEntityDescription(
@@ -141,7 +128,6 @@ async def async_setup_entry(
 class IOmeterSensor(IOmeterEntity, SensorEntity):
     """Defines a IOmeter sensor."""
 
-    _attr_has_entity_name = True
     entity_description: IOmeterEntityDescription
 
     def __init__(
