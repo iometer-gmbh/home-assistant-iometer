@@ -1,5 +1,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://github.com/hacs/integration)  [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 
+# This HACS integration is obsolete. Please use the official Home Assistant core integration.
+
 # IOmeter HACS
 The IOmeter integration to use your IOmeter in Home Assistant to keep track of your power usage, power production and device status.
 
